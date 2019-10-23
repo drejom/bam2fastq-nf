@@ -27,20 +27,12 @@
  */
 
 
-/* 
- * TODO:
- * fix split read channels - need to have one for pairs instead of sep L and R channels
- * fix storeDir for wach process
- * use labels for resource alocation
-*/
-
 log.info "bam2fastq - N F  ~  version 0.1"
 log.info "====================================="
 log.info "name                   : ${params.name}"
 log.info "BAM files              : ${params.bams}"
 log.info "output                 : ${params.output}"
 log.info "\n"
-
 
 /*
  * Create a channel for BAM files 
@@ -51,15 +43,14 @@ bams_sorting = Channel
     .ifEmpty { exit 1, "Cannot find any BAMs matching: ${params.bams}" }
     .map { file -> tuple(file.baseName, file) }
 /*
- * STEP 1A - Sort BAMs by read name
+ * STEP 1 - Sort BAMs by read name and pipe to samtools fastq
  */
 process sort_bams_to_fastq {
     tag "$name"
     container "quay.io/biocontainers/samtools:1.9--h10a08f8_12"
     //module 'samtools/1.6'
     cpus 8
-    memory 8.GB
-    time '2h'
+
     publishDir "${params.output}/fastq", mode: 'copy'
 
     input:
@@ -74,11 +65,10 @@ process sort_bams_to_fastq {
     """
 }
 
-
-
 /*
  * FastQC
  */
+
 process fastqc_raw_reads {
     tag "$name"
     container "quay.io/biocontainers/fastqc:0.11.8--1"
@@ -103,10 +93,6 @@ process fastqc_raw_reads {
 process multiqc {
 
     container "ewels/multiqc:1.7"
-    cpus 1
-    memory 8.GB
-    time '2h'
-
 
     publishDir "${params.output}/fastqs/MultiQC", mode: 'copy'
 
