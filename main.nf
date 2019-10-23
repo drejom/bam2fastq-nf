@@ -94,7 +94,7 @@ process multiqc {
 
     container "ewels/multiqc:1.7"
 
-    publishDir "${params.output}/fastqs/MultiQC", mode: 'copy'
+    publishDir "${params.output}/MultiQC", mode: 'copy'
 
     input:
     file ('fastqc/*') from fastqc_results.collect().ifEmpty([])
