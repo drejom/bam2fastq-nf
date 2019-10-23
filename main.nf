@@ -49,7 +49,7 @@ process sort_bams_to_fastq {
     tag "$name"
     container "quay.io/biocontainers/samtools:1.9--h10a08f8_12"
     //module 'samtools/1.6'
-    cpus 8
+    cpus 2
 
     publishDir "${params.output}", mode: 'copy'
 
