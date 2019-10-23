@@ -49,7 +49,7 @@ process sort_bams_to_fastq {
     tag "$name"
     container "quay.io/biocontainers/samtools:1.9--h10a08f8_12"
     //module 'samtools/1.6'
-    cpus 2
+    cpus 4
 
     publishDir "${params.output}", mode: 'copy'
 
@@ -72,8 +72,7 @@ process sort_bams_to_fastq {
 process fastqc {
     tag "$name"
     container "quay.io/biocontainers/fastqc:0.11.8--1"
-    cpus 2
-    memory 2.GB
+    memory 1.GB
 
     //publishDir "${params.output}/fastqc_rawdata", mode: 'copy',
     //    saveAs: {filename -> filename.indexOf(".zip") > 0 ? "zips/$filename" : "$filename"}
@@ -93,6 +92,8 @@ process fastqc {
 process multiqc {
 
     container "ewels/multiqc:1.7"
+    memory 1.GB
+
 
     publishDir "${params.output}/MultiQC", mode: 'copy'
 
