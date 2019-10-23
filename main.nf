@@ -60,13 +60,14 @@ process sort_bams_to_fastq {
     cpus 8
     memory 8.GB
     time '2h'
-    publishDir "${params.output}/sorted_bams", mode: 'copy'
+    publishDir "${params.output}/fastq", mode: 'copy'
 
     input:
     set name, file(bam) from bams_sorting
 
     output:
     set val(name), file("*_R*.fastq.gz") into read_pairs_fastqc
+
     script:
     """
     samtools sort -@ ${task.cpus} -n ${bam} | samtools fastq -1 ${name}_R1.fastq.gz -2 ${name}_R2.fastq.gz -0 ${name}_R0.fastq.gz -s /dev/null -N -F 0x900 -
@@ -84,8 +85,8 @@ process fastqc_raw_reads {
     cpus 2
     memory 2.GB
 
-    publishDir "${params.output}/fastqc_rawdata", mode: 'copy',
-        saveAs: {filename -> filename.indexOf(".zip") > 0 ? "zips/$filename" : "$filename"}
+    //publishDir "${params.output}/fastqc_rawdata", mode: 'copy',
+    //    saveAs: {filename -> filename.indexOf(".zip") > 0 ? "zips/$filename" : "$filename"}
 
     input:
     set val(name), file(reads) from read_pairs_fastqc
@@ -107,10 +108,10 @@ process multiqc {
     time '2h'
 
 
-    publishDir "${params.output}/MultiQC", mode: 'copy'
+    publishDir "${params.output}/fastqs/MultiQC", mode: 'copy'
 
     input:
-    file ('fastqc_rawdata/*') from fastqc_results.collect().ifEmpty([])
+    file ('fastqc/*') from fastqc_results.collect().ifEmpty([])
     
     output:
     file "*multiqc_report.html" into multiqc_report
