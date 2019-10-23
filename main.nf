@@ -69,7 +69,7 @@ process sort_bams_to_fastq {
  * FastQC
  */
 
-process fastqc_raw_reads {
+process fastqc {
     tag "$name"
     container "quay.io/biocontainers/fastqc:0.11.8--1"
     cpus 2
