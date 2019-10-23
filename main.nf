@@ -51,7 +51,7 @@ process sort_bams_to_fastq {
     //module 'samtools/1.6'
     cpus 8
 
-    publishDir "${params.output}/fastq", mode: 'copy'
+    publishDir "${params.output}", mode: 'copy'
 
     input:
     set name, file(bam) from bams_sorting
