@@ -49,7 +49,8 @@ process sort_bams_to_fastq {
     tag "$name"
     container "quay.io/biocontainers/samtools:1.9--h10a08f8_12"
     //module 'samtools/1.6'
-    cpus 4
+    cpus 6
+    time='24.h'
 
     publishDir "${params.output}", mode: 'copy'
 
@@ -62,6 +63,7 @@ process sort_bams_to_fastq {
     script:
     """
     samtools sort -@ ${task.cpus} -n ${bam} | samtools fastq -1 ${name}_R1.fastq.gz -2 ${name}_R2.fastq.gz -0 ${name}_R0.fastq.gz -s /dev/null -N -F 0x900 -
+    find . -name "*.fastq.gz" -maxdepth 1 -type f -size 0 -exec rm -f {} \;
     """
 }
 
