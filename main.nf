@@ -75,6 +75,7 @@ process fastqc {
     tag "$name"
     container "quay.io/biocontainers/fastqc:0.11.8--1"
     memory 1.GB
+    time 8.h
 
     //publishDir "${params.output}/fastqc_rawdata", mode: 'copy',
     //    saveAs: {filename -> filename.indexOf(".zip") > 0 ? "zips/$filename" : "$filename"}
