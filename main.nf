@@ -50,7 +50,7 @@ process sort_bams_to_fastq {
     container "quay.io/biocontainers/samtools:1.9--h10a08f8_12"
     //module 'samtools/1.6'
     cpus 6
-    time '48h'
+    time 48.h
 
     publishDir "${params.output}", mode: 'copy'
 
